@@ -16,6 +16,6 @@ if __name__ == "__main__":
     print("Total loaded companies", len(all_companies))
 
     result_file = os.path.join(current_folder, "Fetched-software-technology-investment-data.csv")
-    CsvRepository.save_all(all_companies, result_file)
+    CsvRepository.save(all_companies, result_file)
 
     print("Script completed.")

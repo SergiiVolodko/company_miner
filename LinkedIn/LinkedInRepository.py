@@ -29,13 +29,12 @@ class LinkedInRepository:
 # if __name__ == "__main__":
 #     browser = BrowserFactory.create()
 
-#     linkedin_email = "volodkony@gmail.com"
-#     linkedin_pass = "Austin1989"
-#     api_key = "7740mhgfaxg07m"
-#     api_secret = "xh7SowgeS13gRN34"
+#     linkedin_email = "your@email.com"
+#     linkedin_pass = "your-pass"
+#     api_key = "linkedin-app-key"
+#     api_secret = "linkedin-app-secret"
 #     token = LinkedAuthorizationService(browser).refresh_token(api_key, api_secret, linkedin_email, linkedin_pass)
 
 #     application = linkedin.LinkedInApplication(token=token)
 #     repo = LinkedInRepository(application)
-#     #print repo.find_company_by_name("Microsoft")
-#     print(repo.find_company_by_name("Exact"))
+#     print repo.find_company_by_name("Microsoft")

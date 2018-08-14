@@ -11,6 +11,47 @@ from company_miner.LinkedIn.LinkedInRepository import LinkedInRepository
 from linkedin import linkedin
 import datetime
 
+if __name__ == "__main__":
+    caredentials = JsonRepository.load("linkedin-caredentials.json")
+    csv_file = ".\data_mining\\london-companies.csv"    
+    mine(caredentials, csv_file)
+
+def mine(credentials, csv_file):
+    start_time = datetime.datetime.now()
+    print("----- Loading companies from CSV...", start_time.time())
+    data = CsvRepository.load_only_first_column(csv_file)
+    #print(data[42])
+    linkedin_email = credentials["linkedin_email"]
+    linkedin_pass = credentials["linkedin_pass"]
+    apps = credentials["apps"]
+    api_apps = [
+                {'api_key':apps[0]['api_key'],'api_secret':apps[0]['api_secret'], 'from_i':0, 'to_i': 500},
+                {'api_key':apps[1]['api_key'],'api_secret':apps[1]['api_secret'], 'from_i':500, 'to_i': 1000},
+                {'api_key':apps[2]['api_key'],'api_secret':apps[2]['api_secret'], 'from_i':1000, 'to_i': 1500},
+                {'api_key':apps[3]['api_key'],'api_secret':apps[3]['api_secret'], 'from_i':1500, 'to_i': 2000},
+                {'api_key':apps[4]['api_key'],'api_secret':apps[4]['api_secret'], 'from_i':2000, 'to_i': 2500},
+                {'api_key':apps[5]['api_key'],'api_secret':apps[5]['api_secret'], 'from_i':2500, 'to_i': 3000},
+                {'api_key':apps[6]['api_key'],'api_secret':apps[6]['api_secret'], 'from_i':3000, 'to_i': 3500},
+                {'api_key':apps[7]['api_key'],'api_secret':apps[7]['api_secret'], 'from_i':3500, 'to_i': 4000},
+                {'api_key':apps[8]['api_key'],'api_secret':apps[8]['api_secret'], 'from_i':4000, 'to_i': 4500},
+                {'api_key':apps[9]['api_key'],'api_secret':apps[9]['api_secret'], 'from_i':4500, 'to_i': 5000},
+                {'api_key':apps[10]['api_key'],'api_secret':apps[10]['api_secret'], 'from_i':5000, 'to_i': 5500},
+                ]
+    total_found = 0
+    for app in api_apps:
+        from_i = app['from_i']
+        to_i =  app['to_i']
+        print("----- Fetching companies between:", from_i, to_i, datetime.datetime.now() - start_time)
+        data_chunk = data[from_i:to_i]
+        companies = fetch_companies(data_chunk, linkedin_email, linkedin_pass,app['api_key'], app['api_secret'], from_i)
+        result_file = ".\data_mining\\found-companies({0}-{1})[{2}].csv".format(from_i, to_i, len(companies))
+        total_found += len(companies)
+        CsvRepository.save(companies, result_file)
+
+    print("Total found :", total_found)
+    print("Script completed.", datetime.datetime.now() - start_time)
+
+
 def fetch_companies(data, linkedin_email, linkedin_pass, api_key, api_secret, index_shift):   
     sample = []
     i = 0
@@ -74,43 +115,3 @@ def reinit_linkedin_repo(linkedin_email, linkedin_pass, api_key, api_secret):
     browser.quit()
     application = linkedin.LinkedInApplication(token=token)
     return LinkedInRepository(application)
-
-def main(credentials):
-    start_time = datetime.datetime.now()
-    print("----- Loading companies from CSV...", start_time.time())
-    csv_file = ".\data_mining\\london-companies.csv"    
-    data = CsvRepository.load_only_first_column(csv_file)
-    #print(data[42])
-    linkedin_email = credentials["linkedin_email"]
-    linkedin_pass = credentials["linkedin_pass"]
-    apps = credentials["apps"]
-    api_apps = [
-                {'api_key':apps[0]['api_key'],'api_secret':apps[0]['api_secret'], 'from_i':0, 'to_i': 500},
-                {'api_key':apps[1]['api_key'],'api_secret':apps[1]['api_secret'], 'from_i':500, 'to_i': 1000},
-                {'api_key':apps[2]['api_key'],'api_secret':apps[2]['api_secret'], 'from_i':1000, 'to_i': 1500},
-                {'api_key':apps[3]['api_key'],'api_secret':apps[3]['api_secret'], 'from_i':1500, 'to_i': 2000},
-                {'api_key':apps[4]['api_key'],'api_secret':apps[4]['api_secret'], 'from_i':2000, 'to_i': 2500},
-                {'api_key':apps[5]['api_key'],'api_secret':apps[5]['api_secret'], 'from_i':2500, 'to_i': 3000},
-                {'api_key':apps[6]['api_key'],'api_secret':apps[6]['api_secret'], 'from_i':3000, 'to_i': 3500},
-                {'api_key':apps[7]['api_key'],'api_secret':apps[7]['api_secret'], 'from_i':3500, 'to_i': 4000},
-                {'api_key':apps[8]['api_key'],'api_secret':apps[8]['api_secret'], 'from_i':4000, 'to_i': 4500},
-                {'api_key':apps[9]['api_key'],'api_secret':apps[9]['api_secret'], 'from_i':4500, 'to_i': 5000},
-                {'api_key':apps[10]['api_key'],'api_secret':apps[10]['api_secret'], 'from_i':5000, 'to_i': 5500},
-                ]
-    total_found = 0
-    for app in api_apps:
-        from_i = app['from_i']
-        to_i =  app['to_i']
-        print("----- Fetching companies between:", from_i, to_i, datetime.datetime.now() - start_time)
-        data_chunk = data[from_i:to_i]
-        companies = fetch_companies(data_chunk, linkedin_email, linkedin_pass,app['api_key'], app['api_secret'], from_i)
-        result_file = ".\data_mining\\found-companies({0}-{1})[{2}].csv".format(from_i, to_i, len(companies))
-        total_found += len(companies)
-        CsvRepository.save_all(companies, result_file)
-
-    print("Total found :", total_found)
-    print("Script completed.", datetime.datetime.now() - start_time)
-    
-if __name__ == "__main__":
-    caredentials = JsonRepository.load("linkedin-caredentials.json")
-    main(caredentials)

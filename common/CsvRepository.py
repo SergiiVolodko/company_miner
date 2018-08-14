@@ -5,7 +5,7 @@ from os import path
 
 class CsvRepository:
     @staticmethod
-    def save(data_as_dict_of_arrays, file_path):
+    def save_dict_of_arrays(data_as_dict_of_arrays, file_path):
         keys = data_as_dict_of_arrays.keys()
         with open(file_path, 'w', newline='') as f:
             w = csv.writer(f)
@@ -14,7 +14,7 @@ class CsvRepository:
                 w.writerow(each)
 
     @staticmethod
-    def save_all(input_list, file_path):
+    def save(input_list, file_path):
         if len(input_list) == 0:
             print("Nothing to save - the list is empty", file_path)
             return

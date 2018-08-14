@@ -88,9 +88,3 @@ class LinkedAuthorizationService:
         submit_buttons = self.browser.find_elements(By.XPATH, "//button[@id='oauth__auth-form__submit-btn']")
         print("Submit buttons :", len(submit_buttons))
         return len(submit_buttons) > 0
-
-#if __name__ == "__main__":
-#    browser = BrowserFactory.create();
-#    token = LinkedAuthorizationService(browser).refresh_token();
-#    print token;
-#    #JsonRepository.save(token, "token.json");
