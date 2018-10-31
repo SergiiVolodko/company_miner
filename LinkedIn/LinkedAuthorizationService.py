@@ -1,4 +1,7 @@
 from linkedin import linkedin
+### !important 
+### pip3 install python-linkedin
+### pip3 install --upgrade https://github.com/ozgur/python-linkedin/tarball/master
 from time import sleep
 #from company_miner.common.BrowserFactory import BrowserFactory
 from company_miner.common.JsonRepository import JsonRepository

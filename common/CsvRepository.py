@@ -39,12 +39,12 @@ class CsvRepository:
         return result
 
     @staticmethod
-    def load_only_one_column(file_path, column_name):
+    def load_only_first_column(file_path, column_name):
         if not path.exists(file_path):
             raise Exception("No file", file_path)
 
         result = []
-        with open(file_path, "r") as f:
+        with open(file_path, "r", newline='', encoding='mac_roman') as f:
             reader = csv.DictReader(f)
             for row_values in reader:
                 value = row_values[column_name]

@@ -6,7 +6,7 @@ class BrowserFactory:
     def create():
         gecko_path = "C:\\Tools\\geckodriver.exe"
 
-        browser = webdriver.Firefox(executable_path=gecko_path)
+        browser = webdriver.Firefox()
         browser.set_page_load_timeout(90)
 
         return browser

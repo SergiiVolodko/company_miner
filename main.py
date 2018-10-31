@@ -11,15 +11,12 @@ from company_miner.LinkedIn.LinkedInRepository import LinkedInRepository
 from linkedin import linkedin
 import datetime
 
-if __name__ == "__main__":
-    caredentials = JsonRepository.load("linkedin-caredentials.json")
-    csv_file = ".\data_mining\\london-companies.csv"    
-    mine(caredentials, csv_file)
+dir_name = os.path.dirname(os.path.abspath(__file__))
 
 def mine(credentials, csv_file):
     start_time = datetime.datetime.now()
     print("----- Loading companies from CSV...", start_time.time())
-    data = CsvRepository.load_only_first_column(csv_file)
+    data = CsvRepository.load_only_first_column(csv_file, "name")
     #print(data[42])
     linkedin_email = credentials["linkedin_email"]
     linkedin_pass = credentials["linkedin_pass"]
@@ -44,7 +41,8 @@ def mine(credentials, csv_file):
         print("----- Fetching companies between:", from_i, to_i, datetime.datetime.now() - start_time)
         data_chunk = data[from_i:to_i]
         companies = fetch_companies(data_chunk, linkedin_email, linkedin_pass,app['api_key'], app['api_secret'], from_i)
-        result_file = ".\data_mining\\found-companies({0}-{1})[{2}].csv".format(from_i, to_i, len(companies))
+        file_name = "found_companies({0}-{1})[{2}].csv".format(from_i, to_i, len(companies))
+        result_file = os.path.join(dir_name, "data_mining", file_name)
         total_found += len(companies)
         CsvRepository.save(companies, result_file)
 
@@ -115,3 +113,10 @@ def reinit_linkedin_repo(linkedin_email, linkedin_pass, api_key, api_secret):
     browser.quit()
     application = linkedin.LinkedInApplication(token=token)
     return LinkedInRepository(application)
+
+if __name__ == "__main__":
+    creds_file = os.path.join(dir_name, "linkedin_credentials.json")
+    caredentials = JsonRepository.load(creds_file)
+
+    csv_file = os.path.join(dir_name, "data_mining", "london_companies.csv")
+    mine(caredentials, csv_file)

@@ -6,9 +6,10 @@
 __pycache__/
 *.py[cod]
 *$py.class
+.DS_Store
 
 # Credentials
-linkedin-credentials.json
+linkedin_credentials.json
 
 # C extensions
 *.so

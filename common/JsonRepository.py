@@ -1,5 +1,5 @@
 import simplejson as json
-from os import path
+import os
 import datetime
 import codecs
 import numpy as np
@@ -14,7 +14,7 @@ class JsonRepository:
     @staticmethod
     def load(file_path):
         result = None
-        if not path.exists(file_path):
+        if not os.path.exists(file_path):
             return result
         with codecs.open(file_path, "rb", "utf-8") as f:
             result = json.load(f)
