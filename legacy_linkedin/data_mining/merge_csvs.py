@@ -3,6 +3,8 @@ import sys
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 from company_miner.common.CsvRepository import CsvRepository
 
+# Moved data files to Dropbox
+
 if __name__ == "__main__":
     print("Script started")
     all_companies = []
